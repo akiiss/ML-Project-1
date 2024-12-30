@@ -84,6 +84,9 @@ with tabs[0]:
     st.text("Kumarova Ingkar")
     st.text("Azizov Timur")
 
+    st.header("Project Goal:")
+    st.text(""" The goal of our project is to predict the concentrations of PM2.5 and PM10, the key pollutants impacting air quality and public health in Almaty. Using pollutant data and weather data  from Kazhydromet, we aim to develop a reliable model to forecast these concentrations, enabling data analysis and informed decision-making to improve air quality in the city.""")
+
 with tabs[1]:
     st.header("Used dataset")
     col1, col2 = st.columns(2)
