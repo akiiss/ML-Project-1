@@ -160,7 +160,8 @@ with tabs[2]:
     plt.tight_layout()
     plt.show()
     
-    st.pyplot(plt)
+    # st.pyplot(plt)
+    st.image("pm25.png")
 
 
 
@@ -199,8 +200,8 @@ with tabs[2]:
     plt.tight_layout()
     plt.show()
 
-    st.pyplot(plt)
-
+    # st.pyplot(plt)
+    st.image("2.png")
 
 
     import matplotlib.patches as mpatches
@@ -245,7 +246,8 @@ with tabs[2]:
     plt.tight_layout()
     plt.show()
 
-    st.pyplot(plt)
+    # st.pyplot(plt)
+    st.image("3.png")
 
     merged_df['month'] = merged_df['date'].dt.month
     merged_df['season'] = merged_df['month'].apply(
@@ -267,7 +269,8 @@ with tabs[2]:
     plt.tight_layout()
     plt.show()
 
-    st.pyplot(plt)
+    # st.pyplot(plt)
+    st.image("4.png")
 
     import pandas as pd
     import matplotlib.pyplot as plt
@@ -299,8 +302,9 @@ with tabs[2]:
         cbar.set_label(ylabel, fontsize=12)
         plt.tight_layout()
         plt.show()
-        st.pyplot(plt)
+        # st.pyplot(plt)
 
+    
     plot_with_gradient('no2', colormap="YlGnBu", title="NO2", ylabel="NO2 (µg/m³)")
     plot_with_gradient('so2', colormap="YlOrRd", title="SO2", ylabel="SO2 (µg/m³)")
     plot_with_gradient('co', colormap="coolwarm", title="CO", ylabel="CO (µg/m³)")
@@ -308,7 +312,14 @@ with tabs[2]:
     plot_with_gradient('humidity', colormap="Blues", title="Humidity", ylabel="Humidity (%)")
     plot_with_gradient('wind', colormap="YlGn", title="Wind Speed", ylabel="Wind Speed (m/s)")
 
-    
+    st.image("5.png")
+    st.image("6.png")
+    st.image("7.png")
+    st.image("8.png")
+    st.image("9.png")
+    st.image("10.png")
+
+
     import seaborn as sns
     correlation_matrix = merged_df[['pm25', 'pm10', 'no2', 'so2', 'co', 'temperature', 'humidity', 'wind']].corr()
 
@@ -318,7 +329,8 @@ with tabs[2]:
     plt.title('Correlation Matrix Between Pollutants and Weather Conditions')
     plt.show()
 
-    st.pyplot(plt)
+    # st.pyplot(plt)
+    st.image("11.png")
 
     st.header("Strong Positive Correlations")
     st.subheader("PM10 and CO: Correlation = 0.78")
@@ -358,7 +370,8 @@ with tabs[2]:
     plt.tight_layout()
     plt.show()
 
-    st.pyplot(plt)
+    # st.pyplot(plt)
+    st.image("12.png")
     import streamlit as st
 
     # PM2.5
@@ -419,7 +432,8 @@ with tabs[2]:
     plt.title("Boxplot of Pollutant Levels to Identify Outliers")
     plt.show()
 
-    st.pyplot(plt)
+    # st.pyplot(plt)
+    st.image("14.png")
 
     text = """
     PM2.5 and PM10: These pollutants exhibit the most outliers, highlighting significant pollution spikes.
@@ -437,83 +451,88 @@ with tabs[3]:
     from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
     import numpy as np
 
-    def extend_exog(exog, target_length):
-        if exog is not None:
-            exog_extended = exog.copy()
-            while len(exog_extended) < target_length:
-                last_row = exog.iloc[[-1]].copy()
-                exog_extended = pd.concat([exog_extended, last_row], ignore_index=True)
-            return exog_extended.iloc[:target_length]
-        return None
+    # def extend_exog(exog, target_length):
+    #     if exog is not None:
+    #         exog_extended = exog.copy()
+    #         while len(exog_extended) < target_length:
+    #             last_row = exog.iloc[[-1]].copy()
+    #             exog_extended = pd.concat([exog_extended, last_row], ignore_index=True)
+    #         return exog_extended.iloc[:target_length]
+    #     return None
 
-    def forecast_and_plot(series, pollutant_name, exog_columns=None):
-        print(f"\nForecasting for {pollutant_name}...")
+    # def forecast_and_plot(series, pollutant_name, exog_columns=None):
+    #     print(f"\nForecasting for {pollutant_name}...")
 
-        # Prepare the data
-        series = series.copy()
-        series['date'] = pd.to_datetime(series['date'])
-        series = series.set_index('date')
-        series = series.resample('D').mean().interpolate(method='linear')
+    #     # Prepare the data
+    #     series = series.copy()
+    #     series['date'] = pd.to_datetime(series['date'])
+    #     series = series.set_index('date')
+    #     series = series.resample('D').mean().interpolate(method='linear')
 
-        # Train-test split (80% training, 20% testing)
-        train_size = int(len(series) * 0.8)
-        train, test = series[:train_size], series[train_size:]
-        exog_train = train[exog_columns] if exog_columns else None
-        exog_test = test[exog_columns] if exog_columns else None
+    #     # Train-test split (80% training, 20% testing)
+    #     train_size = int(len(series) * 0.8)
+    #     train, test = series[:train_size], series[train_size:]
+    #     exog_train = train[exog_columns] if exog_columns else None
+    #     exog_test = test[exog_columns] if exog_columns else None
 
-        # Fit SARIMAX model
-        model = SARIMAX(train[pollutant_name], exog=exog_train, order=(1, 1, 1), seasonal_order=(1, 1, 0, 12))
-        result = model.fit(disp=False)
+    #     # Fit SARIMAX model
+    #     model = SARIMAX(train[pollutant_name], exog=exog_train, order=(1, 1, 1), seasonal_order=(1, 1, 0, 12))
+    #     result = model.fit(disp=False)
 
-        # Forecast next 365 days
-        forecast_days = len(test)
-        exog_test_extended = extend_exog(exog_test, forecast_days)
-        forecast = result.forecast(steps=forecast_days, exog=exog_test_extended)
+    #     # Forecast next 365 days
+    #     forecast_days = len(test)
+    #     exog_test_extended = extend_exog(exog_test, forecast_days)
+    #     forecast = result.forecast(steps=forecast_days, exog=exog_test_extended)
 
-        # Calculate metrics
-        predicted_test = result.predict(start=test.index[0], end=test.index[-1], exog=exog_test)
-        mae = mean_absolute_error(test[pollutant_name], predicted_test)
-        mse = mean_squared_error(test[pollutant_name], predicted_test)
-        rmse = np.sqrt(mse)
-        r2 = r2_score(test[pollutant_name], predicted_test)
+    #     # Calculate metrics
+    #     predicted_test = result.predict(start=test.index[0], end=test.index[-1], exog=exog_test)
+    #     mae = mean_absolute_error(test[pollutant_name], predicted_test)
+    #     mse = mean_squared_error(test[pollutant_name], predicted_test)
+    #     rmse = np.sqrt(mse)
+    #     r2 = r2_score(test[pollutant_name], predicted_test)
 
-        st.write(f"Metrics for {pollutant_name}:")
-        st.write(f"MAE: {mae}, MSE: {mse}, RMSE: {rmse}, R²: {r2}")
+    #     st.write(f"Metrics for {pollutant_name}:")
+    #     st.write(f"MAE: {mae}, MSE: {mse}, RMSE: {rmse}, R²: {r2}")
 
-        # Plot results
-        plt.figure(figsize=(14, 8))
+    #     # Plot results
+    #     plt.figure(figsize=(14, 8))
 
-        # Subplot 1: Train and test split
-        plt.subplot(2, 1, 1)
-        plt.plot(train.index, train[pollutant_name], label='Train', color='blue')
-        plt.plot(test.index, test[pollutant_name], label='Test', color='orange')
-        plt.title(f'Train and Test Data for {pollutant_name}')
-        plt.xlabel('Date')
-        plt.ylabel(f'{pollutant_name} Concentration')
-        plt.legend()
-        plt.grid(True)
+    #     # Subplot 1: Train and test split
+    #     plt.subplot(2, 1, 1)
+    #     plt.plot(train.index, train[pollutant_name], label='Train', color='blue')
+    #     plt.plot(test.index, test[pollutant_name], label='Test', color='orange')
+    #     plt.title(f'Train and Test Data for {pollutant_name}')
+    #     plt.xlabel('Date')
+    #     plt.ylabel(f'{pollutant_name} Concentration')
+    #     plt.legend()
+    #     plt.grid(True)
 
-        # Subplot 2: Predicted vs Actual
-        plt.subplot(2, 1, 2)
-        plt.plot(test.index, test[pollutant_name], label='Actual Test', color='green')
-        plt.plot(test.index, predicted_test, label='Predicted Test', color='red')
-        plt.title(f'Predicted vs Actual Test Data for {pollutant_name}')
-        plt.xlabel('Date')
-        plt.ylabel(f'{pollutant_name} Concentration')
-        plt.legend()
-        plt.grid(True)
+    #     # Subplot 2: Predicted vs Actual
+    #     plt.subplot(2, 1, 2)
+    #     plt.plot(test.index, test[pollutant_name], label='Actual Test', color='green')
+    #     plt.plot(test.index, predicted_test, label='Predicted Test', color='red')
+    #     plt.title(f'Predicted vs Actual Test Data for {pollutant_name}')
+    #     plt.xlabel('Date')
+    #     plt.ylabel(f'{pollutant_name} Concentration')
+    #     plt.legend()
+    #     plt.grid(True)
 
-        plt.tight_layout()
-        plt.show()
-        st.pyplot(plt)
+    #     plt.tight_layout()
+    #     plt.show()
+        # st.pyplot(plt)
 
     # Apply forecasting for PM2.5 and PM10
     pollutants = ['pm25', 'pm10']
     # Add additional exogenous variables
     exog_columns = ['temperature', 'humidity', 'wind', 'no2', 'so2', 'co']
-
-    for pollutant in pollutants:
-        forecast_and_plot(merged_df[['date', pollutant] + exog_columns], pollutant, exog_columns=exog_columns)
+    st.image("15.png")
+    st.subheader("Metrics for  pm25:")
+    st.text("MAE: 19.99309460581458, MSE: 675.6655547231466, RMSE: 25.993567564363815, R²: 0.9138101869900076")
+    st.image("16.png")
+    st.subheader("Metrics for  pm10:")
+    st.text("MAE: 12.984676586701283, MSE: 363.98088992907367, RMSE: 19.078283201825936, R²: 0.911879961784264")
+    # for pollutant in pollutants:
+    #     forecast_and_plot(merged_df[['date', pollutant] + exog_columns], pollutant, exog_columns=exog_columns)
 
 
 with tabs[4]:
@@ -527,117 +546,128 @@ with tabs[4]:
     from tensorflow.keras.layers import Conv1D, Dense, LSTM, Dropout, Flatten
 
     # Preprocessing function
-    def preprocess_data(series, n_steps=15):
-        scaler = MinMaxScaler()
-        scaled_series = scaler.fit_transform(series.values.reshape(-1, 1))
+    # def preprocess_data(series, n_steps=15):
+    #     scaler = MinMaxScaler()
+    #     scaled_series = scaler.fit_transform(series.values.reshape(-1, 1))
 
-        X, y = [], []
-        for i in range(len(scaled_series) - n_steps):
-            X.append(scaled_series[i:i + n_steps])
-            y.append(scaled_series[i + n_steps])
+    #     X, y = [], []
+    #     for i in range(len(scaled_series) - n_steps):
+    #         X.append(scaled_series[i:i + n_steps])
+    #         y.append(scaled_series[i + n_steps])
 
-        return np.array(X), np.array(y), scaler
+    #     return np.array(X), np.array(y), scaler
 
-    # CNN Model
-    def cnn_model(X_train, y_train, X_test, y_test, n_steps):
-        model = Sequential([
-            Conv1D(filters=15, kernel_size=2, activation='relu', input_shape=(n_steps, 1)),
-            Flatten(),
-            Dense(4, activation='relu'),
-            Dense(1)
-        ])
-        model.compile(optimizer='adam', loss='mse', metrics=['mae'])
-        model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test), verbose=1)
-        return model
+    # # CNN Model
+    # def cnn_model(X_train, y_train, X_test, y_test, n_steps):
+    #     model = Sequential([
+    #         Conv1D(filters=15, kernel_size=2, activation='relu', input_shape=(n_steps, 1)),
+    #         Flatten(),
+    #         Dense(4, activation='relu'),
+    #         Dense(1)
+    #     ])
+    #     model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+    #     model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test), verbose=1)
+    #     return model
 
-    # LSTM Model
-    def lstm_model(X_train, y_train, X_test, y_test, n_steps):
-        model = Sequential([
-            LSTM(25, activation='relu', input_shape=(n_steps, 1), return_sequences=True),
-            Dropout(0.2),
-            LSTM(25, activation='relu'),
-            Dense(4, activation='relu'),
-            Dense(1)
-        ])
-        model.compile(optimizer='adam', loss='mse', metrics=['mae'])
-        model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test), verbose=1)
-        return model
+    # # LSTM Model
+    # def lstm_model(X_train, y_train, X_test, y_test, n_steps):
+    #     model = Sequential([
+    #         LSTM(25, activation='relu', input_shape=(n_steps, 1), return_sequences=True),
+    #         Dropout(0.2),
+    #         LSTM(25, activation='relu'),
+    #         Dense(4, activation='relu'),
+    #         Dense(1)
+    #     ])
+    #     model.compile(optimizer='adam', loss='mse', metrics=['mae'])
+    #     model.fit(X_train, y_train, epochs=50, batch_size=32, validation_data=(X_test, y_test), verbose=1)
+    #     return model
 
-    # Forecast and Visualization
-    def forecast_and_visualize(series, pollutant_name, model_type="CNN", n_steps=15):
-        print(f"\n{model_type} Forecasting for {pollutant_name}...")
+    # # Forecast and Visualization
+    # def forecast_and_visualize(series, pollutant_name, model_type="CNN", n_steps=15):
+    #     print(f"\n{model_type} Forecasting for {pollutant_name}...")
 
-        # Preprocess data
-        X, y, scaler = preprocess_data(series[[pollutant_name]], n_steps)
+    #     # Preprocess data
+    #     X, y, scaler = preprocess_data(series[[pollutant_name]], n_steps)
 
-        # Train-test split
-        train_size = int(0.8 * len(X))
-        X_train, X_test = X[:train_size], X[train_size:]
-        y_train, y_test = y[:train_size], y[train_size:]
+    #     # Train-test split
+    #     train_size = int(0.8 * len(X))
+    #     X_train, X_test = X[:train_size], X[train_size:]
+    #     y_train, y_test = y[:train_size], y[train_size:]
 
-        # Reshape for the model
-        X_train = X_train.reshape((X_train.shape[0], X_train.shape[1], 1))
-        X_test = X_test.reshape((X_test.shape[0], X_test.shape[1], 1))
+    #     # Reshape for the model
+    #     X_train = X_train.reshape((X_train.shape[0], X_train.shape[1], 1))
+    #     X_test = X_test.reshape((X_test.shape[0], X_test.shape[1], 1))
 
-        # Build and train model
-        if model_type == "CNN":
-            model = cnn_model(X_train, y_train, X_test, y_test, n_steps)
-        elif model_type == "LSTM":
-            model = lstm_model(X_train, y_train, X_test, y_test, n_steps)
+    #     # Build and train model
+    #     if model_type == "CNN":
+    #         model = cnn_model(X_train, y_train, X_test, y_test, n_steps)
+    #     elif model_type == "LSTM":
+    #         model = lstm_model(X_train, y_train, X_test, y_test, n_steps)
 
-        # Make predictions
-        y_pred = model.predict(X_test)
-        y_pred_inv = scaler.inverse_transform(y_pred)
-        y_test_inv = scaler.inverse_transform(y_test.reshape(-1, 1))
-        y_train_inv = scaler.inverse_transform(y_train.reshape(-1, 1))
+    #     # Make predictions
+    #     y_pred = model.predict(X_test)
+    #     y_pred_inv = scaler.inverse_transform(y_pred)
+    #     y_test_inv = scaler.inverse_transform(y_test.reshape(-1, 1))
+    #     y_train_inv = scaler.inverse_transform(y_train.reshape(-1, 1))
 
-        # Extract dates for plotting
-        date_index = series.index[n_steps:]
-        train_dates = date_index[:train_size]
-        test_dates = date_index[train_size:]
+    #     # Extract dates for plotting
+    #     date_index = series.index[n_steps:]
+    #     train_dates = date_index[:train_size]
+    #     test_dates = date_index[train_size:]
 
-        # Calculate metrics
-        mae = mean_absolute_error(y_test_inv, y_pred_inv)
-        mse = mean_squared_error(y_test_inv, y_pred_inv)
-        rmse = np.sqrt(mse)
-        r2 = r2_score(y_test_inv, y_pred_inv)
+    #     # Calculate metrics
+    #     mae = mean_absolute_error(y_test_inv, y_pred_inv)
+    #     mse = mean_squared_error(y_test_inv, y_pred_inv)
+    #     rmse = np.sqrt(mse)
+    #     r2 = r2_score(y_test_inv, y_pred_inv)
 
-        st.write(f"Metrics for {pollutant_name} ({model_type}):")
-        st.write(f"MAE: {mae:.2f}, MSE: {mse:.2f}, RMSE: {rmse:.2f}, R²: {r2}")
+    #     st.write(f"Metrics for {pollutant_name} ({model_type}):")
+    #     st.write(f"MAE: {mae:.2f}, MSE: {mse:.2f}, RMSE: {rmse:.2f}, R²: {r2}")
 
-        # Visualization
-        plt.figure(figsize=(14, 8))
+    #     # Visualization
+    #     plt.figure(figsize=(14, 8))
 
-        # Subplot 1: Train and Test Data
-        plt.subplot(2, 1, 1)
-        plt.plot(train_dates, y_train_inv, label='Train', color='blue')
-        plt.plot(test_dates, y_test_inv, label='Test', color='orange')
-        plt.title(f'Train and Test Data for {pollutant_name}')
-        plt.xlabel('Date')
-        plt.ylabel(f'{pollutant_name} Concentration')
-        plt.legend()
-        plt.grid(True)
+    #     # Subplot 1: Train and Test Data
+    #     plt.subplot(2, 1, 1)
+    #     plt.plot(train_dates, y_train_inv, label='Train', color='blue')
+    #     plt.plot(test_dates, y_test_inv, label='Test', color='orange')
+    #     plt.title(f'Train and Test Data for {pollutant_name}')
+    #     plt.xlabel('Date')
+    #     plt.ylabel(f'{pollutant_name} Concentration')
+    #     plt.legend()
+    #     plt.grid(True)
 
-        # Subplot 2: Predicted vs Actual Test Data
-        plt.subplot(2, 1, 2)
-        plt.plot(test_dates, y_test_inv, label='Actual Test', color='green')
-        plt.plot(test_dates, y_pred_inv, label='Predicted Test', color='red')
-        plt.title(f'Predicted vs Actual Test Data for {pollutant_name}')
-        plt.xlabel('Date')
-        plt.ylabel(f'{pollutant_name} Concentration')
-        plt.legend()
-        plt.grid(True)
+    #     # Subplot 2: Predicted vs Actual Test Data
+    #     plt.subplot(2, 1, 2)
+    #     plt.plot(test_dates, y_test_inv, label='Actual Test', color='green')
+    #     plt.plot(test_dates, y_pred_inv, label='Predicted Test', color='red')
+    #     plt.title(f'Predicted vs Actual Test Data for {pollutant_name}')
+    #     plt.xlabel('Date')
+    #     plt.ylabel(f'{pollutant_name} Concentration')
+    #     plt.legend()
+    #     plt.grid(True)
 
-        plt.tight_layout()
-        plt.show()
-        st.pyplot(plt)
+    #     plt.tight_layout()
+    #     plt.show()
+    #     # st.pyplot(plt)
 
-    forecast_and_visualize(merged_df, 'pm25', model_type="CNN")
-    forecast_and_visualize(merged_df, 'pm10', model_type="CNN")
+    # forecast_and_visualize(merged_df, 'pm25', model_type="CNN")
+    # forecast_and_visualize(merged_df, 'pm10', model_type="CNN")
 
-    forecast_and_visualize(merged_df, 'pm25', model_type="LSTM")
-    forecast_and_visualize(merged_df, 'pm10', model_type="LSTM")
-
+    # forecast_and_visualize(merged_df, 'pm25', model_type="LSTM")
+    # forecast_and_visualize(merged_df, 'pm10', model_type="LSTM")
+    st.image("17.png")
+    st.subheader("Metrics for  pm25 (CNN):")
+    st.text("MAE: 17.52, MSE: 517.66, RMSE: 22.75, R²: 0.7545565844560707")
+    st.image("18.png")
+    st.subheader("Metrics for  pm10 (CNN):")
+    st.text("MAE: 10.25, MSE: 259.99, RMSE: 16.12, R²: 0.8161823682734101")
+    st.image("19.png")
+    st.subheader("Metrics for  pm25 (LSTM):")
+    st.text("MAE: 15.78, MSE: 442.50, RMSE: 21.04, R²: 0.8627948112641001")
+    st.image("20.png")
+    st.subheader("Metrics for  pm10 (LSTM):")
+    st.text("MAE: 12.11, MSE: 291.25, RMSE: 17.07, R²: 0.7339764052221391")
 
 with tabs[5]:
     st.header("Metrics")
@@ -686,7 +716,8 @@ with tabs[5]:
 
         plt.tight_layout()
         plt.show()
-        st.pyplot(plt)
+        # st.pyplot(plt)
+        st.image("21.png")
 
     # Plot MAE
     plot_mae(metrics)
@@ -716,7 +747,8 @@ with tabs[5]:
 
         plt.tight_layout()
         plt.show()
-        st.pyplot(plt)
+        # st.pyplot(plt)
+        st.image("22.png")
     # Plot MSE
     plot_mse(metrics)
 
@@ -746,7 +778,8 @@ with tabs[5]:
 
         plt.tight_layout()
         plt.show()
-        st.pyplot(plt)
+        # st.pyplot(plt)
+        st.image("23.png")
     # Plot RMSE
     plot_rmse(metrics)
 
@@ -777,7 +810,8 @@ with tabs[5]:
 
         plt.tight_layout()
         plt.show()
-        st.pyplot(plt)
+        # st.pyplot(plt)
+        st.image("24.png")
 
     # Plot R²
     plot_r2(metrics)
